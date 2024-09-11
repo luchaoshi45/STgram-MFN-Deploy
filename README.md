@@ -16,9 +16,7 @@ $ pip install -r requirements.txt
 $ python run.py
 ```
 ### Do not Train Download our trained model (Choose one)
-Place it in this position
-
-![alt text](image.png)
+![alt text](pth.png)
 ### Deploy 
 ---
 `sh run.sh` or
