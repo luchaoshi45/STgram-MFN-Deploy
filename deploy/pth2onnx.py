@@ -71,22 +71,22 @@ def infer(args):
             net.load_state_dict(torch.load(model_path)['model'])
             # net.load_state_dict(torch.load(model_path)['clf_state_dict'])
 
-    # 定义一个示例输入张量，形状根据模型输入调整
-    dummy_input_wav = torch.randn(1, 160000).float().to(args.device)  # 替换为你的输入维度
-    dummy_input_mel = torch.randn(1, 128, 313).float().to(args.device)  # 替换为你的输入维度
+    # Define an example input tensor, the shape is adjusted according to the model input
+    dummy_input_wav = torch.randn(1, 160000).float().to(args.device)  # Replace with your input dimensions
+    dummy_input_mel = torch.randn(1, 128, 313).float().to(args.device)  # Replace with your input dimensions
     dummy_input_label = torch.tensor([1], dtype=torch.int64).to(args.device)
 
     onnx_path = "deploy/STgram-MFN.onnx"
-    # 导出为 ONNX 格式
-    torch.onnx.export(net,  # 你的模型
-                      (dummy_input_wav, dummy_input_mel, dummy_input_label),  # 模型的输入
-                      onnx_path,  # 导出的文件名
-                      export_params=True,  # 导出所有参数
-                      opset_version=11,  # ONNX 版本
-                      do_constant_folding=True,  # 是否执行常量折叠优化
-                      input_names=['x_wav', 'x_mel', 'x_label'],  # 输入名
-                      output_names=['output'],  # 输出名
-                      dynamic_axes={'x_wav': {0: 'batch_size'},  # 动态维度
+    # Export to ONNX format
+    torch.onnx.export(net,  # Your model
+                      (dummy_input_wav, dummy_input_mel, dummy_input_label), # Model input
+                      onnx_path, # Export file name
+                      export_params=True,  # Export all parameters
+                      opset_version=11,  # ONNX Version
+                      do_constant_folding=True,  # Whether to perform constant folding optimization
+                      input_names=['x_wav', 'x_mel', 'x_label'], # Input name
+                      output_names=['output'],  
+                      dynamic_axes={'x_wav': {0: 'batch_size'}, # Dynamic Dimensions
                                     'x_mel': {0: 'batch_size'},
                                     'x_label': {0: 'batch_size'},
                                     'output': {0: 'batch_size'}})
